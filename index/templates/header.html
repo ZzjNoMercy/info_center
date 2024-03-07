@@ -1,0 +1,190 @@
+{% load static %}
+<div class="mb-3">
+    <header class="navbar navbar-expand-md d-print-none" data-bs-theme="dark">
+        <div class="container-xl">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
+                    aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                <a href=".">
+                    <img src="{% static 'images/logo.svg' %}" width="110" height="32" alt="Tabler"
+                         class="navbar-brand-image">
+                </a>
+            </h1>
+            <div class="navbar-nav flex-row order-md-last">
+                <div class="nav-item d-none d-md-flex me-3">
+                    <div class="btn-list">
+
+                        <a href="https://github.com/sponsors/codecalm" class="btn" target="_blank" rel="noreferrer">
+                            <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon text-pink" width="24" height="24"
+                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/>
+                            </svg>
+                            Sponsor
+                        </a>
+                    </div>
+                </div>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
+                       aria-label="Open user menu">
+                        <span class="avatar avatar-sm"><img src="{% static 'images/default_avatar.jpg' %}"
+                                                            alt="头像图片"></span>
+                        <div class="d-none d-xl-block ps-2">
+                            <div>{{ request.session.info}}</div><!--账号名称-->
+                        </div>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                        <a href="{% url "index:logout" %}" class="dropdown-item">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <header class="navbar-expand-md">
+        <div class="collapse navbar-collapse" id="navbar-menu">
+            <div class="navbar">
+                <div class="container-xl">
+                    <ul class="navbar-nav">
+                        <li class="nav-item active" id="index_li">
+                            <a class="nav-link" href="{% url "index:home" %}">
+                              <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/star -->
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home"
+                                       width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                       fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                      <path d="M5 12l-2 0l9 -9l9 9l-2 0"/>
+                                      <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/>
+                                      <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"/>
+                                  </svg>
+                              </span>
+                                <span class="nav-link-title">
+                                主页
+                              </span>
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown" id="company_li">
+                            <a class="nav-link dropdown-toggle" href="./#" data-bs-toggle="dropdown">
+                              <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/star -->
+                                  <svg xmlns="http://www.w3.org/2000/svg"
+                                       class="icon icon-tabler icon-tabler-building-skyscraper" width="24" height="24"
+                                       viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                       stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                      <path d="M3 21l18 0"/>
+                                      <path d="M5 21v-14l8 -4v18"/>
+                                      <path d="M19 21v-10l-6 -4"/>
+                                      <path d="M9 9l0 .01"/>
+                                      <path d="M9 12l0 .01"/>
+                                      <path d="M9 15l0 .01"/>
+                                      <path d="M9 18l0 .01"/>
+                                    </svg>
+                              </span>
+                                <span class="nav-link-title">
+                                企业
+                              </span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="./#">
+                                    上汽通用五菱
+                                </a>
+                                <a class="dropdown-item" href="./#">
+                                    比亚迪汽车
+                                </a>
+                                <a class="dropdown-item" href="./#">
+                                    吉利汽车
+                                </a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown" id="market_li">
+                            <a class="nav-link dropdown-toggle" href="#navbar-third" data-bs-toggle="dropdown"
+                               data-bs-auto-close="outside" role="button" aria-expanded="false">
+                              <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/star -->
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     class="icon icon-tabler icon-tabler-topology-star-3" width="24" height="24"
+                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                      <path d="M10 19a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z"/>
+                                      <path d="M18 5a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z"/>
+                                      <path d="M10 5a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z"/>
+                                      <path d="M6 12a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z"/>
+                                      <path d="M18 19a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z"/>
+                                      <path d="M14 12a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z"/>
+                                      <path d="M22 12a2 2 0 1 0 -4 0a2 2 0 0 0 4 0z"/>
+                                      <path d="M6 12h4"/>
+                                      <path d="M14 12h4"/>
+                                      <path d="M15 7l-2 3"/>
+                                      <path d="M9 7l2 3"/>
+                                      <path d="M11 14l-2 3"/>
+                                      <path d="M13 14l2 3"/>
+                                </svg>
+                              </span>
+                                <span class="nav-link-title">
+                                市场
+                              </span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="./#">
+                                    A0+A00 2门纯电
+                                </a>
+                                <a class="dropdown-item" href="./#">
+                                    10万以下A0+A00 4门纯电
+                                </a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown" id="data_li">
+                            <a class="nav-link dropdown-toggle" href="#navbar-forth" data-bs-toggle="dropdown">
+                              <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     class="icon icon-tabler icon-tabler-database-share" width="24" height="24"
+                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                  <path d="M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3"/>
+                                  <path d="M4 6v6c0 1.657 3.582 3 8 3c.361 0 .716 -.009 1.065 -.026"/>
+                                  <path d="M20 13v-7"/>
+                                  <path d="M4 12v6c0 1.657 3.582 3 8 3"/>
+                                  <path d="M16 22l5 -5"/>
+                                  <path d="M21 21.5v-4.5h-4.5"/>
+                                </svg>
+                              </span>
+                                <span class="nav-link-title">
+                                数据
+                              </span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="{% url 'index:rank' %}">
+                                    排行榜
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
+                        <form action="{% url 'index:search' %}" method="get" autocomplete="off" novalidate target="_blank>
+                            {% csrf_token %}
+                            <div class=" input-icon
+                        " style="margin-right:3px ">
+                        <span class="input-icon-addon">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                     stroke-linecap="round" stroke-linejoin="round"><path stroke="none"
+                                                                                          d="M0 0h24v24H0z"
+                                                                                          fill="none"/><path
+                                        d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/><path d="M21 21l-6 -6"/></svg>
+                              </span>
+                        <input type="text" value="" class="form-control" placeholder="Search…"
+                               aria-label="Search in website" style="display: flex" name="q">
+                    </div>
+                    <input id="search-submit-button" type="submit" value="搜索" class="btn btn-primary" disabled>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+</div>
+</header>
+</div>

@@ -1,0 +1,79 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>信息中心</title>
+    <!-- CSS files -->
+    <link rel="stylesheet" href="{% static 'plugins/tabler/css/tabler.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/tabler/css/tabler-flags.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/tabler/css/tabler-payments.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/tabler/css/tabler-vendors.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/tabler/css/demo.min.css' %}">
+    <link rel="preload" href="{% static 'font/OPlusSans3-Regular.ttf' %}" as="font" type="font/woff2" crossorigin>
+    <!-- JS files -->
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'plugins/tabler/js/tabler.min.js' %}"></script>
+    <script src="{% static 'js/echarts.min.js' %}"></script>
+    <script src="{% static 'plugins/tabler/js/demo-theme.js' %}"></script>
+    <script src="{% static 'plugins/tabler/js/demo.js' %}"></script>
+    <script src="{% static 'plugins/tabler/libs/list.js/dist/list.js' %}"></script>
+    <script src="{% static 'plugins/tabler/libs/fslightbox/index.js' %}" defer></script>
+    <style>
+        @import url('https://rsms.me/inter/inter.css');
+
+        :root {
+            --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+        }
+
+        @font-face {
+            font-family: OppoSans-Regular;
+            src: url("{% static 'font/OPlusSans3-Regular.ttf'%}");
+        }
+
+        body {
+            margin: 0;
+            font-family: OppoSans-Regular, "Microsoft YaHei UI";
+            font-feature-settings: "cv03", "cv04", "cv11";
+        }
+    </style>
+</head>
+<body class=" d-flex flex-column">
+<div class="page page-center">
+    <div class="container container-normal py-4">
+        <div class="row align-items-center g-4">
+          <div class="col-lg">
+            <div class="container-tight">
+              <div class="text-center mb-4">
+                <img src="{% static 'images/logo.svg' %}" height="36" alt="">
+              </div>
+              <div class="card card-md">
+                <div class="card-body">
+                  <h2 class="h2 text-center mb-4">登录你的账户</h2>
+                  <form action="{% url 'index:login' %}" method="post" autocomplete="off" novalidate>
+                      {% csrf_token %}
+                      {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label" for="id_{{ field.name }}">{{ field.label }}</label>
+                        {{ field }}
+                        <span style="color: red">{{ field.errors.0 }}</span>
+                    </div>
+                {% endfor %}
+                    <div class="form-footer">
+                      <button type="submit" class="btn btn-primary w-100">登录</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg d-none d-lg-block">
+            <img src="{% static 'images/login.png' %}" height="600" class="d-block mx-auto" alt="">
+          </div>
+        </div>
+      </div>
+</div>
+</body>
+</html>
