@@ -18,7 +18,6 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views import static
 from django.conf import settings
-from django.conf import settings
 
 # if settings.DEBUG is False:
 #     urlpatterns += patterns('',url(r'^static/(?P.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT,}),)
@@ -26,4 +25,5 @@ from django.conf import settings
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("index/", include('index.urls')),
+    path(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATIC_ROOT}, name='static'),
 ]

@@ -1,0 +1,742 @@
+{% load static %}
+{% load percent_format %}
+{% load hot_value_trans %}
+{% load ptime_format %}
+{% load percent_format %}
+{% load promotion_time_format %}
+{% load timestamp %}
+{% load car_update_time_format %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>信息中心</title>
+    <!-- CSS files -->
+    <link rel="stylesheet" href="{% static 'index/plugins/tabler/css/tabler.css' %}">
+    <link rel="stylesheet" href="{% static 'index/plugins/tabler/css/tabler-flags.css' %}">
+    <link rel="stylesheet" href="{% static 'index/plugins/tabler/css/tabler-payments.css' %}">
+    <link rel="stylesheet" href="{% static 'index/plugins/tabler/css/tabler-vendors.css' %}">
+    <link rel="stylesheet" href="{% static 'index/plugins/tabler/css/demo.css' %}">
+    <link rel="preload" href="{% static 'index/font/OPlusSans3-Regular.ttf' %}" as="font" type="font/woff2" crossorigin>
+    <!-- JS files -->
+    <script src="{% static 'index/js/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'index/plugins/tabler/js/tabler.min.js' %}"></script>
+    <script src="{% static 'index/js/echarts.min.js' %}"></script>
+    <script src="{% static 'index/plugins/tabler/js/demo-theme.js' %}"></script>
+    <script src="{% static 'index/plugins/tabler/js/demo.js' %}"></script>
+    <script src="{% static 'index/plugins/tabler/libs/list.js/dist/list.js' %}"></script>
+    <script src="{% static 'index/plugins/tabler/libs/fslightbox/index.js' %}" defer></script>
+    <style>
+        @import url('https://rsms.me/inter/inter.css');
+
+        :root {
+            --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+        }
+
+        @font-face {
+            font-family: OppoSans-Regular;
+            src: url("{% static 'index/font/OPlusSans3-Regular.ttf'%}");
+        }
+
+        body {
+            margin: 0;
+            font-family: OppoSans-Regular, "Microsoft YaHei UI";
+            font-feature-settings: "cv03", "cv04", "cv11";
+        }
+
+        form {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    {% include 'index/header.html' %}
+    <div class="page-wrapper">
+        <!-- Page header -->
+        <div class="page-header d-print-none">
+            <div class="container-xl">
+                <div class="row g-2 align-items-center">
+                    <div class="col">
+                        <h2 class="page-title">
+                            搜索结果
+                        </h2>
+                        <div class="text-muted mt-1">约 {{ length.infos_len }} 记录</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Page body -->
+        <div class="page-body">
+            <div class="container-xl">
+                <div class="row g-4">
+                    <div class="col-3">
+                        <div class="subheader mb-2">分类</div>
+                        <div class="list-group list-group-transparent mb-3">
+                            {% if longnews %}
+                                <button class="list-group-item list-group-item-action d-flex align-items-center active"
+                                        id="longnews">
+                                    资讯
+                                    <small class="text-muted ms-auto">{{ length.longnews_len }}</small>
+                                </button>
+                                {% if flashnews %}
+                                    <button class="list-group-item list-group-item-action d-flex align-items-center"
+                                            id="flashnews">
+                                        高管动态
+                                        <small class="text-muted ms-auto">{{ length.flashnews_len }}</small>
+                                    </button>
+                                {% endif %}
+                                {% if promotion_infos %}
+                                    <button class="list-group-item list-group-item-action d-flex align-items-center"
+                                            id="promotioninfos">
+                                        促销信息
+                                        <small class="text-muted ms-auto">{{ length.promotion_infos_len }}</small>
+                                    </button>
+                                {% endif %}
+                                {% if car_infos %}
+                                    <button class="list-group-item list-group-item-action d-flex align-items-center"
+                                            id="carinfos">
+                                        在售车型
+                                        <small class="text-muted ms-auto">{{ length.car_infos_len }}</small>
+                                    </button>
+                                {% endif %}
+                            {% elif flashnews %}
+                                <button class="list-group-item list-group-item-action d-flex align-items-center active"
+                                        id="flashnews">
+                                    高管动态
+                                    <small class="text-muted ms-auto">{{ length.flashnews_len }}</small>
+                                </button>
+                                {% if promotion_infos %}
+                                    <button class="list-group-item list-group-item-action d-flex align-items-center"
+                                            id="promotioninfos">促销信息
+                                        <small class="text-muted ms-auto">{{ length.promotion_infos_len }}</small>
+                                    </button>
+                                {% endif %}
+                                {% if car_infos %}
+                                    <button class="list-group-item list-group-item-action d-flex align-items-center"
+                                            id="carinfos">在售车型
+                                        <small class="text-muted ms-auto">{{ length.car_infos_len }}</small>
+                                    </button>
+                                {% endif %}
+                            {% elif promotion_infos %}
+                                <button class="list-group-item list-group-item-action d-flex align-items-center active"
+                                        id="promotioninfos">促销信息
+                                    <small class="text-muted ms-auto">{{ length.promotion_infos_len }}</small>
+                                </button>
+                                {% if car_infos %}
+                                    <button class="list-group-item list-group-item-action d-flex align-items-center"
+                                            id="carinfos">
+                                        在售车型
+                                        <small class="text-muted ms-auto">{{ length.car_infos_len }}</small>
+                                    </button>
+                                {% endif %}
+                            {% elif car_infos %}
+                                <button class="list-group-item list-group-item-action d-flex align-items-center active"
+                                        id="carinfos">
+                                    在售车型
+                                    <small class="text-muted ms-auto">{{ length.car_infos_len }}</small>
+                                </button>
+                            {% else %}
+                                <div></div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-9">
+                        <div class="row row-cards">
+                            <div class="col-12">
+                                <div class="card" style="height: 56rem">
+                                    <div class="card-header" style="padding-left:12px">
+                                        <h3 class="card-title">相关内容</h3>
+                                    </div>
+                                    <div class="card-body card-body-scrollable card-body-scrollable-shadow">
+                                        <div class="divide-y" id="list">
+                                            {% if longnews %}
+                                                {% for longnew in longnews %}
+                                                    <div>
+                                                        <div class="row">
+                                                            <div class="col-auto">
+                                                                {% if longnew.post_platform == '盖世汽车' %}
+                                                                    <span class="avatar"><img
+                                                                            src="{% static 'index/images/gasgoo.png' %}"/></span>
+                                                                {% elif longnew.post_platform == 'IT之家' %}
+                                                                    <span class="avatar"><img
+                                                                            src="{% static 'index/images/ithome.png' %}"/></span>
+                                                                {% endif %}
+                                                            </div>
+                                                            <div class="col" style="display: flex;align-items: center;">
+                                                                <div>{{ longnew.title }}
+                                                                    <a href={{ longnew.url }} target='_blank'>
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                             class="icon"
+                                                                             width="24"
+                                                                             height="24"
+                                                                             viewBox="0 0 24 24" stroke-width="2"
+                                                                             stroke="currentColor"
+                                                                             fill="none"
+                                                                             stroke-linecap="round"
+                                                                             stroke-linejoin="round">
+                                                                            <path stroke="none" d="M0 0h24v24H0z"
+                                                                                  fill="none"/>
+                                                                            <path d="M9 15l6 -6"/>
+                                                                            <path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464"/>
+                                                                            <path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463"/>
+                                                                        </svg>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-auto align-self-center">
+                                                                <div>{{ longnew.ptime|ptime_format }}</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+                                            {% elif flashnews %}
+                                                <div style="display: flex;flex-wrap: wrap;justify-content: space-between">
+                                                    {% for flashnew in flashnews %}
+                                                        {% if flashnew.user_name %}
+                                                            <div class="toast show" role="alert" aria-live="assertive"
+                                                                 aria-atomic="true"
+                                                                 data-bs-autohide="false" data-bs-toggle="toast"
+                                                                 style="padding-top: 16px;margin-bottom: 8px">
+                                                                <div class="toast-header">
+                                                                    <!--suppress CssUnknownTarget -->
+                                                                    <span class="avatar avatar-xs me-2"
+                                                                          style="background-image: url({{ flashnew.avatar_url }})"></span>
+                                                                    <div>
+                                                                        <strong style="display: block">{{ flashnew.user_name }}</strong>
+                                                                        <div style="font-size: 20rpx">{{ flashnew.user_verified }}</div>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="toast-header">
+
+                                                                    <small>{{ flashnew.ptime }}</small>
+                                                                </div>
+                                                                <div class="toast-body">{{ flashnew.content }}
+                                                                    <a href={{ flashnew.url }} target="_blank">【详情】</a>
+                                                                    {% if flashnew.pic_url %}
+                                                                        <div class="col">
+                                                                            <a target="_blank"
+                                                                               href={{ flashnew.pic_url }}>
+                                                                                <!-- Photo -->
+                                                                                <div class="img-responsive img-responsive-1x1 rounded border"
+                                                                                     style="background-image: url({{ flashnew.pic_url }});height: 50%;width: 50%;">
+                                                                                </div>
+                                                                            </a>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                            {% elif promotion_infos %}
+                                                <div id="table-default" class="table-responsive"
+                                                     style="overflow: auto;height: 500px;">
+                                                    <table class="table">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>
+                                                                <button class="table-sort" data-sort="sort-car">车型
+                                                                </button>
+                                                            </th>
+                                                            <th>
+                                                                <button class="table-sort" data-sort="sort-type">政策类型
+                                                                </button>
+                                                            </th>
+                                                            <th>
+                                                                <button class="table-sort" data-sort="sort-promotion">
+                                                                    促销幅度
+                                                                </button>
+                                                            </th>
+                                                            <th>
+                                                                <button class="table-sort" data-sort="sort-price">
+                                                                    起售价(万)
+                                                                </button>
+                                                            </th>
+                                                            <th>
+                                                                <button class="table-sort" data-sort="sort-start_time">
+                                                                    开始时间
+                                                                </button>
+                                                            </th>
+                                                            <th>
+                                                                <button class="table-sort" data-sort="sort-end_time">
+                                                                    结束时间
+                                                                </button>
+                                                            </th>
+                                                            <th>
+                                                                <button class="table-sort" data-sort="sort-area">区域
+                                                                </button>
+                                                            </th>
+                                                            <th>
+                                                                <button class="table-sort" data-sort="sort-source">来源
+                                                                </button>
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody class="table-tbody">
+                                                        {% for promotion_info in promotion_infos %}
+                                                            <tr>
+                                                                <td class="sort-car"
+                                                                    nowrap="nowrap">{{ promotion_info.car_id }}</td>
+                                                                <td class="sort-type">{{ promotion_info.type }}</td>
+                                                                <td class="sort-promotion"
+                                                                    nowrap="nowrap">{{ promotion_info.promotion }}</td>
+                                                                <td class="sort-price"
+                                                                    nowrap="nowrap">{{ promotion_info.price }}</td>
+                                                                <td class="sort-start_time"
+                                                                    data-date="{{ promotion_info.start_time|timestamp }}">{{ promotion_info.start_time|promotion_time_format }}</td>
+                                                                <td class="sort-end_time"
+                                                                    data-date="{{ promotion_info.end_time|timestamp }}">{{ promotion_info.end_time|promotion_time_format }}</td>
+                                                                <td class="sort-area"
+                                                                    nowrap="nowrap">{{ promotion_info.area }}</td>
+                                                                <td class="sort-source"
+                                                                    nowrap="nowrap">{{ promotion_info.source }}
+                                                                    <a href={{ promotion_info.link }} target="_blank"
+                                                                       class="ms-1"
+                                                                       aria-label="Open website">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                             class="icon"
+                                                                             width="24"
+                                                                             height="24"
+                                                                             viewBox="0 0 24 24" stroke-width="2"
+                                                                             stroke="currentColor"
+                                                                             fill="none"
+                                                                             stroke-linecap="round"
+                                                                             stroke-linejoin="round">
+                                                                            <path stroke="none" d="M0 0h24v24H0z"
+                                                                                  fill="none"/>
+                                                                            <path d="M9 15l6 -6"/>
+                                                                            <path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464"/>
+                                                                            <path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463"/>
+                                                                        </svg>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            {% elif car_infos %}
+                                                <div class="row scrollable-div">
+                                                    <div class="container-xl">
+                                                        {% for car_info in car_infos %}
+                                                        <div class="card" style="margin-bottom: 5px">
+                                                            <div class="card-header">
+                                                                <h3 class="card-title">{{ car_info.car_name}}</h3>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <div class="datagrid">
+                                                                    <div class="datagrid-item">
+                                                                        <div class="datagrid-title">最近上新时间</div>
+                                                                        <div class="datagrid-content">{{ car_info.update_time|car_update_time_format}}</div>
+                                                                    </div>
+                                                                    <div class="datagrid-item">
+                                                                        <div class="datagrid-title">上新类型</div>
+                                                                        <div class="datagrid-content">{{ car_info.type}}</div>
+                                                                    </div>
+                                                                      <div class="datagrid-item">
+                                                                        <div class="datagrid-title">指导价</div>
+                                                                        <div class="datagrid-content">{{ car_info.price}}</div>
+                                                                    </div>
+                                                                    <div class="datagrid-item">
+                                                                        <div class="datagrid-title">车型级别
+                                                                        </div>
+                                                                        <div class="datagrid-content">{{ car_info.car_class}}</div>
+                                                                    </div>
+                                                                    <div class="datagrid-item">
+                                                                        <div class="datagrid-title">车型链接</div>
+                                                                        <div class="datagrid-content">
+                                                                            <a href="{{ car_info.car_url}}">查看详情</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% include 'index/footer.html' %}
+    </div>
+</div>
+</body>
+<script>
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    <!-- 获取cookie -->
+    var csrftoken = getCookie('csrftoken');
+
+    <!-- 获取longnews -->
+    $("#longnews").click(function () {
+        $.ajax({
+            url: 'longnews_ajax',
+            type: 'post',
+            data: {
+                q: '{{ q }}'
+            },
+            beforeSend: function (xhr) {
+                // 在请求头中添加csrf_token
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function (data) {
+                var CsrfToken = $("[name='csrfmiddlewaretoken']").val()
+                $("#list").empty()
+                $('#flashnews').removeClass('active')
+                $('#longnews').addClass('active')
+                $('#promotioninfos').removeClass('active')
+                $('#carinfos').removeClass('active')
+                const content_list = document.querySelector("#list")
+                content_list.removeAttribute("style")
+                for (var i = 0; i < data.length; i++) {
+                    var ptime = data[i]['fields']['ptime']
+                    var md_time = ptime.slice(5, 10)
+                    var hm_time = ptime.slice(11, 16)
+                    var time = md_time + " " + hm_time
+                    if (data[i]['fields']['post_platform'] == '盖世汽车') {
+                        var avatar_html = '<div class="col-auto"><span class="avatar"><img src="{% static 'index/images/gasgoo.png' %}"/></span></div>';
+                    } else {
+                        var avatar_html = '<div class="col-auto"><span class="avatar"><img src="{% static 'index/images/ithome.png' %}"/></span></div>';
+                    }
+                    html = '<div class="row">' + avatar_html + '<div class="col" style="display: flex;align-items: center;">' + data[i]['fields']['title'] + '<a target="_blank" href=' + data[i]['fields']['url'] + '><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 15l6 -6"/><path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464"/><path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463"/></svg></a>' + '</div><div class="col-auto align-self-center">' + time + '</div></div></div>';
+                    $("#list").append(html)
+                }
+            }
+        })
+    });
+    <!-- 获取flashnews -->
+    $("#flashnews").click(function () {
+        $.ajax({
+            url: 'flashnews_ajax',
+            type: 'post',
+            data: {
+                q: '{{ q }}'
+            },
+            beforeSend: function (xhr) {
+                // 在请求头中添加csrf_token
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function (data) {
+                $("#list").empty()
+                $('#flashnews').addClass('active')
+                $('#longnews').removeClass('active')
+                $('#promotioninfos').removeClass('active')
+                $('#carinfos').removeClass('active')
+                const content_list = document.querySelector("#list")
+                content_list.style.display = "flex"
+                content_list.style.flexWrap = "wrap"
+                content_list.style.justifyContent = "space-between"
+                for (var i = 0; i < data.length; i++) {
+                    var avatar_url = data[i]['fields']['avatar_url']
+                    var username = data[i]['fields']['user_name']
+                    var user_verified = data[i]['fields']['user_verified']
+                    var content = data[i]['fields']['content']
+                    var detail_url = data[i]['fields']['url']
+                    var pic_url = data[i]['fields']['pic_url']
+                    var ptime = data[i]['fields']['ptime']
+                    var year = ptime.slice(0, 4)
+                    var month = ptime.slice(5, 7)
+                    var day = ptime.slice(8, 10)
+                    var ymd = year + "年" + month + "月" + day + "日"
+                    var hour = ptime.slice(11, 13)
+                    var minute = ptime.slice(14, 16)
+                    var time = hour + ":" + minute
+                    var final_time = ymd + " " + time
+                    var html1 = '<div class="toast show" role="alert" aria-live="assertive"aria-atomic="true"data-bs-autohide="false" data-bs-toggle="toast"style="padding-top: 16px;margin-bottom: 8px">'
+                    var html2 = '<div class="toast-header"><span class="avatar avatar-xs me-2" style="background-image: url(' + avatar_url + ')"></span><div><strong style="display: block">' + username + '</strong><div style="font-size: 20rpx">' + user_verified + '</div></div></div>'
+                    var html3 = '<div class="toast-header"><small>' + final_time + '</small></div>'
+                    var html4 = '<div class="toast-body">' + content + '<a href=' + detail_url + ' target="_blank">【详情】</a>'
+                    if (pic_url != "" && pic_url != null && pic_url != undefined) {
+                        var html5 = '<div class="col"><a target="_blank" href=' + pic_url + '><div class="img-responsive img-responsive-1x1 rounded border"style="background-image: url(' + pic_url + ');height: 50%;width: 50%;"' + '></a></div></div></div>'
+                        var html = html1 + html2 + html3 + html4 + html5
+                    } else {
+                        var html = html1 + html2 + html3 + html4 + '</div>'
+                    }
+                    $("#list").append(html)
+                }
+            }
+        })
+    });
+    <!-- 获取promotion_infos -->
+    $("#promotioninfos").click(function () {
+        $.ajax({
+            url: 'promotion_infos_ajax',
+            type: 'post',
+            data: {
+                q: '{{ q }}'
+            },
+            beforeSend: function (xhr) {
+                // 在请求头中添加csrf_token
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function (data) {
+                $("#list").empty()
+                $('#flashnews').removeClass('active')
+                $('#longnews').removeClass('active')
+                $('#promotioninfos').addClass('active')
+                $('#carinfos').removeClass('active')
+                const content_list = document.querySelector("#list")
+                content_list.removeAttribute("style")
+                var trs_html = ''
+                var th_html = `<div id="table-default" class="table-responsive"
+                                                     style="overflow: auto;height: 500px;">
+                                                    <table class="table">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>
+                                                                <button class="table-sort" data-sort="sort-car">车型
+                                                                </button>
+                                                            </th>
+                                                            <th>
+                                                                <button class="table-sort" data-sort="sort-type">政策类型
+                                                                </button>
+                                                            </th>
+                                                            <th>
+                                                                <button class="table-sort" data-sort="sort-promotion">
+                                                                    促销幅度
+                                                                </button>
+                                                            </th>
+                                                            <th>
+                                                                <button class="table-sort" data-sort="sort-price">
+                                                                    起售价(万)
+                                                                </button>
+                                                            </th>
+                                                            <th>
+                                                                <button class="table-sort" data-sort="sort-start_time">
+                                                                    开始时间
+                                                                </button>
+                                                            </th>
+                                                            <th>
+                                                                <button class="table-sort" data-sort="sort-end_time">
+                                                                    结束时间
+                                                                </button>
+                                                            </th>
+                                                            <th>
+                                                                <button class="table-sort" data-sort="sort-area">区域
+                                                                </button>
+                                                            </th>
+                                                            <th>
+                                                                <button class="table-sort" data-sort="sort-source">来源
+                                                                </button>
+                                                            </th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody class="table-tbody">`
+                for (var i = 0; i < data.length; i++) {
+                    var car = data[i]['fields']['car']
+                    var type = data[i]['fields']['type']
+                    var promotion = data[i]['fields']['promotion']
+                    var price = data[i]['fields']['price']
+                    var start_time = data[i]['fields']['start_time']
+                    var start_time_stamp = Date.parse(start_time)
+                    var start_month = start_time.slice(5, 7)
+                    var start_day = start_time.slice(8, 10)
+                    var start_time_concat = start_month + "-" + start_day
+                    var end_time = data[i]['fields']['end_time']
+                    var end_time_stamp = Date.parse(end_time)
+                    var end_month = end_time.slice(5, 7)
+                    var end_day = end_time.slice(8, 10)
+                    var end_time_concat = end_month + "-" + end_day
+                    var area = data[i]['fields']['area']
+                    var source = data[i]['fields']['source']
+                    var link = data[i]['fields']['link']
+                    var tr_html = `<tr>
+                                        <td class="sort-car"
+                                            nowrap="nowrap">${car}</td>
+                                        <td class="sort-type">${type}</td>
+                                        <td class="sort-promotion"
+                                            nowrap="nowrap">${promotion}</td>
+                                        <td class="sort-price"
+                                            nowrap="nowrap">${price}</td>
+                                        <td class="sort-start_time"
+                                            data-date="${start_time_stamp}">${start_time_concat}</td>
+                                        <td class="sort-end_time"
+                                            data-date="${end_time_stamp}">${end_time_concat}</td>
+                                        <td class="sort-area"
+                                            nowrap="nowrap">${area}</td>
+                                        <td class="sort-source"
+                                            nowrap="nowrap">${source}
+                                            <a href=${link}target="_blank"
+                                               class="ms-1"
+                                               aria-label="Open website">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                     class="icon"
+                                                     width="24"
+                                                     height="24"
+                                                     viewBox="0 0 24 24" stroke-width="2"
+                                                     stroke="currentColor"
+                                                     fill="none"
+                                                     stroke-linecap="round"
+                                                     stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z"
+                                                          fill="none"/>
+                                                    <path d="M9 15l6 -6"/>
+                                                    <path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464"/>
+                                                    <path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463"/>
+                                                </svg>
+                                            </a>
+                                        </td>
+                                    </tr>`
+                    trs_html = trs_html + tr_html
+                }
+                var tt_html = '</tbody></table></div>'
+                $("#list").append(th_html + trs_html + tt_html)
+            }
+        })
+    });
+    <!-- 获取car_infos -->
+    $("#carinfos").click(function () {
+        $.ajax({
+            url: 'car_infos_ajax',
+            type: 'post',
+            data: {
+                q: '{{ q }}'
+            },
+            beforeSend: function (xhr) {
+                // 在请求头中添加csrf_token
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function (data) {
+                $("#list").empty()
+                $('#flashnews').removeClass('active')
+                $('#longnews').removeClass('active')
+                $('#promotioninfos').removeClass('active')
+                $('#carinfos').addClass('active')
+                const content_list = document.querySelector("#list")
+                content_list.removeAttribute("style")
+                var head_html = '<div class="row scrollable-div"><div class="container-xl">'
+                var body_htmls = ''
+                for (var i = 0; i < data.length; i++) {
+                    var car_name = data[i]['fields']['car_name']
+                    var price = data[i]['fields']['price']
+                    var type = data[i]['fields']['type']
+                    var car_class = data[i]['fields']['car_class']
+                    var update_time = data[i]['fields']['update_time']
+                    var car_url = data[i]['fields']['car_url']
+                    var year = update_time .slice(0, 4)
+                    var month = update_time .slice(5, 7)
+                    var day = update_time .slice(8, 10)
+                    var ymd = year + "-" + month + "-" + day
+                    var body_html=`<div class="card" style="margin-bottom: 5px">
+                                                            <div class="card-header">
+                                                                <h3 class="card-title">${car_name}</h3>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <div class="datagrid">
+                                                                    <div class="datagrid-item">
+                                                                        <div class="datagrid-title">最近上新时间</div>
+                                                                        <div class="datagrid-content">${ymd}</div>
+                                                                    </div>
+                                                                    <div class="datagrid-item">
+                                                                        <div class="datagrid-title">上新类型</div>
+                                                                        <div class="datagrid-content">${type}</div>
+                                                                    </div>
+                                                                      <div class="datagrid-item">
+                                                                        <div class="datagrid-title">指导价</div>
+                                                                        <div class="datagrid-content">${price}</div>
+                                                                    </div>
+                                                                    <div class="datagrid-item">
+                                                                        <div class="datagrid-title">车型级别
+                                                                        </div>
+                                                                        <div class="datagrid-content">${car_class}</div>
+                                                                    </div>
+                                                                    <div class="datagrid-item">
+                                                                        <div class="datagrid-title">车型链接</div>
+                                                                        <div class="datagrid-content">
+                                                                            <a href="${car_url}">查看详情</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>`
+                    var body_htmls = body_htmls+body_html
+                }
+                var bottom_html = '</div></div>'
+                $("#list").append(head_html + body_htmls + bottom_html)
+            }
+        })
+    });
+    <!-- 设置搜索按钮状态 -->
+    if (!String.prototype.trim) {
+        String.prototype.trim = function () {
+            return this.replace(/^\s+|\s+$/g, '');
+        };
+    }
+
+    // var dom=document.querySelector("[name=username]");
+    // var btn=document.querySelector("#sub");
+
+    // dom.addEventListener("input",function(e){
+    //   if(this.value.trim().length){
+    //     btn.removeAttribute("disabled");
+    //   }else{
+    //     btn.disabled="disabled";
+    //   }
+
+    // },false);
+
+
+    //搜索按钮状态变更
+    $("input[name=q]").on("input", function (evt) {
+        if ($(this).val().trim().length) {
+
+            $("#search-submit-button").removeAttr("disabled");
+        } else {
+            $("#search-submit-button").prop("disabled", "disabled");
+        }
+    });
+    // 政策排序
+    document.addEventListener("click", function () {
+        const list = new List('table-default', {
+            sortClass: 'table-sort',
+            listClass: 'table-tbody',
+            valueNames: ['sort-car', 'sort-type', 'sort-promotion', 'sort-price',
+                {attr: 'data-date', name: 'sort-start_time'}, {attr: 'data-date', name: 'sort-end_time'},
+                'sort-area', 'sort-source'
+            ]
+        });
+    });
+    $('#data_li').click(function (){
+        $('#index_li').removeClass('active')
+        $('#company_li').removeClass('active')
+        $('#market_li').removeClass('active')
+        $('#data_li').addClass('active')
+    })
+    // 页面加载重置nav bar状态
+    $(function () {
+        $('#index_li').removeClass('active')
+        $('#company_li').removeClass('active')
+        $('#market_li').removeClass('active')
+        $('#data_li').removeClass('active')
+    });
+</script>
+</html>
