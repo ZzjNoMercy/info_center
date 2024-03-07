@@ -1,0 +1,143 @@
+{% extends 'header_extend.html' %}
+{% load hot_value_trans %}
+{% load static %}
+{% block body %}
+    {% load hot_value_trans %}
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">
+                </div>
+                <h2 class="page-title">
+                    最新动态
+                </h2>
+            </div>
+        </div>
+    </div>
+    <div class="page-body">
+        <div class="container-xl">
+            <div class="row row-deck row-cards">
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header" style="padding-left:12px">
+                            <h3 class="card-title">微博热搜</h3>
+                        </div>
+                        <table class="table table-vcenter">
+                            <thead>
+                            <tr>
+                                <th style="font-size: 12px;padding: 8px 12px 8px 12px">标题</th>
+                                <th style="font-size: 12px;padding: 8px 20px 8px 12px">热度</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for sina_resou in sina_resous %}
+                                <tr>
+                                    <td class="td-truncate">
+                                        <div class="text-truncate">
+                                            {{ sina_resou.title|truncatewords:"20" }}
+                                            <a href={{ sina_resou.url }} target="_blank" class="ms-1"
+                                               aria-label="Open website">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24"
+                                                     height="24"
+                                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                     fill="none"
+                                                     stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                                    <path d="M9 15l6 -6"/>
+                                                    <path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464"/>
+                                                    <path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463"/>
+                                                </svg>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td class="text-nowrap text-muted">{{ sina_resou.hot_value|hot_value_trans }}万</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card" class="col-12">
+                        <div class="card" style="height: 35rem">
+                            <div class="card-header" style="padding-left:12px">
+                                <h3 class="card-title">24小时高管说</h3>
+                            </div>
+                            <div class="card-body card-body-scrollable card-body-scrollable-shadow">
+                                <div class="divide-y">
+                                    <div class="toast-container">
+                                        {% for flashnew in flashnews %}
+                                            {% if flashnew.user_name %}
+                                                <div class="toast show" role="alert" aria-live="assertive"
+                                                     aria-atomic="true"
+                                                     data-bs-autohide="false" data-bs-toggle="toast">
+                                                    <div class="toast-header">
+                                                        <!--suppress CssUnknownTarget -->
+                                                        <span class="avatar avatar-xs me-2"
+                                                              style="background-image: url({{ flashnew.avatar_url }})"></span>
+                                                        <div>
+                                                            <strong style="display: block">{{ flashnew.user_name }}</strong>
+                                                            <div style="font-size: 20rpx">{{ flashnew.user_verified }}</div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="toast-header">
+
+                                                        <small>{{ flashnew.ptime }}</small>
+                                                    </div>
+                                                    <div class="toast-body">{{ flashnew.content }}
+                                                        <a href={{ flashnew.url }} target="_blank">【详情】</a>
+                                                        {% if flashnew.pic_url %}
+                                                            <img src={{ flashnew.pic_url }} style="height:50%;width:50%;display:block">
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="row row-cards">
+                        <div class="col-12">
+                            <div class="card" style="height: 35rem">
+                                <div class="card-header" style="padding-left:12px">
+                                    <h3 class="card-title">最新资讯</h3>
+                                </div>
+                                <div class="card-body card-body-scrollable card-body-scrollable-shadow">
+                                    <div class="divide-y">
+                                        {% for longnew in longnews %}
+                                            <div>
+                                                <div class="row">
+                                                    <div class="col-auto">
+                                                    {% if longnew.post_platform == '盖世汽车' %}
+                                                        <span class="avatar" ><img src="{% static '/images/gasgoo.png' %}"/></span>
+                                                    {% elif longnew.post_platform == 'IT之家' %}
+                                                        <span class="avatar" ><img src="{% static '/images/ithome.png' %}"/></span>
+                                                    {% endif %}
+                                                    </div>
+                                                    <div class="col">
+                                                        <div>
+                                                            <a href={{ longnew.url }} target='_blank'>{{longnew.title}}</a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-auto align-self-center">
+                                                        <div class="badge bg-primary">{{ longnew.ptime|slice:":5"}}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
