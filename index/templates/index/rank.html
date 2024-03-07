@@ -1,0 +1,145 @@
+{% load static %}
+{% load percent_format %}
+{% load hot_value_trans %}
+{% load ptime_format %}
+{% load percent_format %}
+{% load promotion_time_format %}
+{% load timestamp %}
+{% load car_update_time_format %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>信息中心</title>
+    <!-- CSS files -->
+    <link rel="stylesheet" href="{% static 'index/plugins/tabler/css/tabler.css' %}">
+    <link rel="stylesheet" href="{% static 'index/plugins/tabler/css/tabler-flags.css' %}">
+    <link rel="stylesheet" href="{% static 'index/plugins/tabler/css/tabler-payments.css' %}">
+    <link rel="stylesheet" href="{% static 'index/plugins/tabler/css/tabler-vendors.css' %}">
+    <link rel="stylesheet" href="{% static 'index/plugins/tabler/css/demo.css' %}">
+    <link rel="preload" href="{% static 'index/font/OPlusSans3-Regular.ttf' %}" as="font" type="font/woff2" crossorigin>
+    <!-- JS files -->
+    <script src="{% static 'index/js/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'index/plugins/tabler/js/tabler.min.js' %}"></script>
+    <script src="{% static 'index/js/echarts.min.js' %}"></script>
+    <script src="{% static 'index/plugins/tabler/js/demo-theme.js' %}"></script>
+    <script src="{% static 'index/plugins/tabler/js/demo.js' %}"></script>
+    <script src="{% static 'index/plugins/tabler/libs/list.js/dist/list.js' %}"></script>
+    <script src="{% static 'index/plugins/tabler/libs/fslightbox/index.js' %}" defer></script>
+    <style>
+        @import url('https://rsms.me/inter/inter.css');
+
+        :root {
+            --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+        }
+
+        @font-face {
+            font-family: OppoSans-Regular;
+            src: url("{% static 'index/font/OPlusSans3-Regular.ttf'%}");
+        }
+
+        body {
+            margin: 0;
+            font-family: OppoSans-Regular, "Microsoft YaHei UI";
+            font-feature-settings: "cv03", "cv04", "cv11";
+        }
+
+        form {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+{% include 'index/header.html' %}
+<div class="page">
+    <div class="page-wrapper">
+        <!-- Page header -->
+        <div class="container-xl">
+            <div class="row g-2 align-items-center">
+                <div class="col">
+                    <!-- Page pre-title -->
+                    <div class="page-pretitle">
+                    </div>
+                    <h2 class="page-title">
+                        销量排行
+                    </h2>
+                </div>
+            </div>
+        </div>
+        <!-- Page body -->
+        <div class="page-body">
+            <div class="container-xl">
+                <div class="row row-cards">
+                    {% for month, query_set in company_sales.items %}
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h3 class="card-title">{{ month }}车企销量排行</h3>
+                                    <table class="table table-sm table-borderless">
+                                        <thead>
+                                        <tr>
+                                            <th>企业</th>
+                                            <th class="text-start">{{ month }}</th>
+                                            <th class="text-start">年累</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for company_sale in query_set %}
+                                            <tr>
+                                                <td>
+                                                    <div class="progressbg">
+                                                        <div class="progress progressbg-progress">
+                                                            <div class="progress-bar bg-primary-lt"
+                                                                 style="width: {{ company_sale.percent }}"
+                                                                 role="progressbar"
+                                                                 aria-valuenow="{{ company_sale.percent }}"
+                                                                 aria-valuemin="0"
+                                                                 aria-valuemax="100"
+                                                                 aria-label="{{ company_sale.percent }} share">
+                                                                <span class="visually-hidden">{{ company_sale.percent }} share</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="progressbg-text">{{ company_sale.brand_id }}</div>
+                                                    </div>
+                                                </td>
+                                                <td class="w-1  text-center">{{ company_sale.sale }}</td>
+                                                <td class="w-1  text-center ">{{ company_sale.year_sale }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'index/footer.html' %}
+</body>
+<script>
+    $("input[name=q]").on("input", function (evt) {
+        if ($(this).val().trim().length) {
+
+            $("#search-submit-button").removeAttr("disabled");
+        } else {
+            $("#search-submit-button").prop("disabled", "disabled");
+        }
+    });
+    // 页面加载重置nav bar状态
+    $(function () {
+        $('#index_li').removeClass('active')
+        $('#company_li').removeClass('active')
+        $('#market_li').removeClass('active')
+        $('#data_li').addClass('active')
+    });
+</script>
+</html>

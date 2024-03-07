@@ -29,7 +29,7 @@ def home(request):
     gtm_infos = GtmInfo.objects.filter(
         Q(update_time__month=timezone.now().month) & Q(update_time__year=timezone.now().year)
     )
-    return render(request, 'index.html', {'sina_resous': sina_resous, 'flashnews': flashnews,
+    return render(request, 'index/index.html', {'sina_resous': sina_resous, 'flashnews': flashnews,
                                           'longnews': longnews, "header_data_gsev": header_data_gsev,
                                           "header_data_binguo": header_data_binguo,
                                           "header_data_xingguang": header_data_xingguang,
@@ -37,7 +37,7 @@ def home(request):
 
 
 def demo(request):
-    return render(request, 'demo.html')
+    return render(request, 'index/demo.html')
 
 
 def search(request):
@@ -60,12 +60,12 @@ def search(request):
         'infos_len': len(longnews) + len(flashnews) + len(promotion_infos) + len(car_infos)
     }
     if length['infos_len'] != 0:
-        return render(request, 'search_results.html', context={
+        return render(request, 'index/search_results.html', context={
             'longnews': longnews, "q": q, 'length': length, 'flashnews': flashnews, 'promotion_infos': promotion_infos,
             'car_infos': car_infos
         })
     else:
-        return render(request, "blank.html")
+        return render(request, "index/blank.html")
 
 
 def rank(request):
@@ -82,7 +82,7 @@ def rank(request):
         # 计算百分比
         for company_sale in query_set:
             company_sale.percent = '{:.2%}'.format(company_sale.sale / max_sale)
-    return render(request, "rank.html", context={"company_sales": company_sales})
+    return render(request, "index/rank.html", context={"company_sales": company_sales})
 
 
 def longnews_ajax(request):
@@ -150,13 +150,13 @@ class LoginForm(BootstrapForm.BootStrapUserForm):
 def login(request):
     if request.method == 'GET':
         form = LoginForm()
-        return render(request, 'login.html', context={"form": form})
+        return render(request, 'index/login.html', context={"form": form})
     form = LoginForm(data=request.POST)
     if form.is_valid():
         user_obj = UserInfo.objects.filter(**form.cleaned_data).first()
         if not user_obj:
             form.add_error("password", "用户名或密码错误")
-            return render(request, 'login.html', context={"form": form})
+            return render(request, 'index/login.html', context={"form": form})
         request.session['info'] = user_obj.user_name
         return redirect(reverse('index:home'), context={"user_obj": user_obj})
 
@@ -194,13 +194,13 @@ def sign(request):
     # 添加用户
     if request.method == 'GET':
         form = UserModelForm()
-        return render(request, 'sign_up.html', context={"form": form})
+        return render(request, 'index/sign_up.html', context={"form": form})
     form = UserModelForm(data=request.POST)
     if form.is_valid():
         print(form.cleaned_data)
         form.save()
         return redirect(reverse('index:login'))
-    return render(request, 'sign_up.html', context={"form": form})
+    return render(request, 'index/sign_up.html', context={"form": form})
 
 
 def logout(request):
